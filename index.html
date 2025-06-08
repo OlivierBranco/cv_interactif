@@ -203,12 +203,17 @@
         .timeline-item {
             position: relative;
             margin: 2rem 0;
-            opacity: 0;
-            transform: translateY(30px);
+            opacity: 1;
+            transform: translateY(0);
             transition: all 0.6s ease;
         }
 
-        .timeline-item.visible {
+        .timeline-item.animate {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .timeline-item.animate.visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -440,12 +445,17 @@
 
         /* Animations */
         .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
+            opacity: 1;
+            transform: translateY(0);
             transition: all 0.6s ease;
         }
 
-        .fade-in.visible {
+        .fade-in.animate {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .fade-in.animate.visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -761,8 +771,8 @@
         }
 
         function checkScroll() {
-            const timelineItems = document.querySelectorAll('.timeline-item');
-            const fadeElements = document.querySelectorAll('.fade-in');
+            const timelineItems = document.querySelectorAll('.timeline-item.animate');
+            const fadeElements = document.querySelectorAll('.fade-in.animate');
             
             timelineItems.forEach(item => {
                 if (isElementInViewport(item)) {
@@ -834,14 +844,6 @@
                 });
             });
             observer.observe(skillsSection);
-        });
-
-        // Add fade-in class to elements
-        document.addEventListener('DOMContentLoaded', function() {
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => {
-                section.classList.add('fade-in');
-            });
         });
     </script>
 </body>
