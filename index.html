@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olivier Branco - Data & Dev Experience</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #10b981;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .typing-text {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            min-height: 2rem;
+        }
+
+        .cursor {
+            display: inline-block;
+            background: #10b981;
+            width: 3px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #10b981;
+            border: 2px solid #10b981;
+        }
+
+        .btn-secondary:hover {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Section Générale */
+        .section {
+            padding: 5rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #10b981;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #10b981, #3b82f6);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 2rem 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: 55%;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 55%;
+            text-align: left;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: #10b981;
+            border: 4px solid #0f172a;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .timeline-content {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 2rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+            border-color: #10b981;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+        }
+
+        .timeline-date {
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-company {
+            color: #3b82f6;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-description {
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* Skills Dashboard */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-card {
+            background: rgba(30, 41, 59, 0.6);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            border-color: #10b981;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+
+        .skill-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-list li {
+            padding: 0.5rem 0;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-list li::before {
+            content: '▶';
+            color: #10b981;
+            font-size: 0.8rem;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #10b981;
+            display: block;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+
+        /* Contact */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-card {
+            background: rgba(30, 41, 59, 0.6);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            border-color: #10b981;
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            color: #e2e8f0;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .typing-text {
+                font-size: 1.2rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 60px;
+                margin-right: 0;
+                text-align: left;
+            }
+
+            .timeline-marker {
+                left: 20px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">O.BRANCO</div>
+            <ul class="nav-links">
+                <li><a onclick="scrollToSection('hero')">Accueil</a></li>
+                <li><a onclick="scrollToSection('experience')">Expérience</a></li>
+                <li><a onclick="scrollToSection('skills')">Compétences</a></li>
+                <li><a onclick="scrollToSection('contact')">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <h1>Olivier Branco</h1>
+            <div class="typing-text" id="typing-text"></div>
+            <div class="cta-buttons">
+                <a href="#experience" class="btn btn-primary" onclick="scrollToSection('experience')">
+                    <i class="fas fa-timeline"></i> Mon Parcours
+                </a>
+                <a href="#skills" class="btn btn-secondary" onclick="scrollToSection('skills')">
+                    <i class="fas fa-chart-bar"></i> Mes Compétences
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section id="experience" class="section">
+        <h2><i class="fas fa-briefcase"></i> Mon Parcours Professionnel</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2024 - Aujourd'hui</div>
+                    <div class="timeline-title">Responsable du pôle support</div>
+                    <div class="timeline-company">Coutances mer et bocage</div>
+                    <div class="timeline-description">
+                        Management des techniciens de support informatique. Mise en place d'outils de reporting/data pour la collectivité. Mise en place de process avec outils Office 365.
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Management</span>
+                        <span class="tech-tag">Power BI</span>
+                        <span class="tech-tag">Office 365</span>
+                        <span class="tech-tag">Teams</span>
+                        <span class="tech-tag">Power Automate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2022 - 2024</div>
+                    <div class="timeline-title">Gestionnaire de parc informatique</div>
+                    <div class="timeline-company">Coutances mer et bocage</div>
+                    <div class="timeline-description">
+                        Administration du parc informatique de la collectivité. Achat, réception, inventaire, préparation du matériel. Élaboration du budget matériel du service.
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-tag">GLPI</span>
+                        <span class="tech-tag">Power BI</span>
+                        <span class="tech-tag">Office 365</span>
+                        <span class="tech-tag">Support</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2017 - 2022</div>
+                    <div class="timeline-title">Chef de projet</div>
+                    <div class="timeline-company">Coutances mer et bocage</div>
+                    <div class="timeline-description">
+                        Pilotage des projets "école numérique". Gestion d'un parc de 300 iPad avec MDM. Mise en place d'ENT dans les écoles. Création de l'Educ lab.
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Gestion de projet</span>
+                        <span class="tech-tag">MDM</span>
+                        <span class="tech-tag">ENT</span>
+                        <span class="tech-tag">iPad</span>
+                        <span class="tech-tag">Pédagogie</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2016 - 2017</div>
+                    <div class="timeline-title">Dirigeant</div>
+                    <div class="timeline-company">Mon Assistant Numérique</div>
+                    <div class="timeline-description">
+                        Assistance, initiation, formation et accompagnement aux usages du numérique. Du dépannage particulier à la formation en milieu scolaire.
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Formation</span>
+                        <span class="tech-tag">Support</span>
+                        <span class="tech-tag">Entrepreneuriat</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2007 - 2016</div>
+                    <div class="timeline-title">Développeur d'applications</div>
+                    <div class="timeline-company">Oracle</div>
+                    <div class="timeline-description">
+                        Développement d'applications pour la Restauration/Hôtellerie. Applications de gestion en VB.NET, modules en langage SIM, rapports Crystal Report.
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-tag">VB.NET</span>
+                        <span class="tech-tag">SQL Server</span>
+                        <span class="tech-tag">Oracle</span>
+                        <span class="tech-tag">Crystal Report</span>
+                        <span class="tech-tag">SIM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <h2><i class="fas fa-cogs"></i> Mes Compétences</h2>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number" data-target="18">0</span>
+                <div class="stat-label">Années d'expérience</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" data-target="42">0</span>
+                <div class="stat-label">Écoles équipées</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" data-target="300">0</span>
+                <div class="stat-label">iPad gérés</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" data-target="5">0</span>
+                <div class="stat-label">Domaines d'expertise</div>
+            </div>
+        </div>
+
+        <!-- Skills Grid -->
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-code"></i></div>
+                <div class="skill-title">Développement</div>
+                <ul class="skill-list">
+                    <li>VB.NET</li>
+                    <li>SQL Server / Oracle</li>
+                    <li>Crystal Report</li>
+                    <li>Applications métier</li>
+                </ul>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="skill-title">Data & Analytics</div>
+                <ul class="skill-list">
+                    <li>Power BI</li>
+                    <li>Dashboard création</li>
+                    <li>Reporting</li>
+                    <li>Base de données</li>
+                </ul>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-project-diagram"></i></div>
+                <div class="skill-title">Gestion de Projet</div>
+                <ul class="skill-list">
+                    <li>Pilotage de projets</li>
+                    <li>Budget management</li>
+                    <li>Équipes multiples</li>
+                    <li>École numérique</li>
+                </ul>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-server"></i></div>
+                <div class="skill-title">Gestion de Parc</div>
+                <ul class="skill-list">
+                    <li>GLPI</li>
+                    <li>MDM (iPad)</li>
+                    <li>Support utilisateur</li>
+                    <li>Inventaire</li>
+                </ul>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-microsoft"></i></div>
+                <div class="skill-title">Office 365 / Microsoft</div>
+                <ul class="skill-list">
+                    <li>Teams</li>
+                    <li>Power Automate</li>
+                    <li>SharePoint</li>
+                    <li>Process automation</li>
+                </ul>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                <div class="skill-title">Pédagogie & Formation</div>
+                <ul class="skill-list">
+                    <li>Formation utilisateurs</li>
+                    <li>Accompagnement</li>
+                    <li>Educ Lab</li>
+                    <li>Milieu scolaire</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2><i class="fas fa-envelope"></i> Me Contacter</h2>
+        <div class="contact-grid">
+            <div class="contact-card">
+                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                <div class="contact-info">olivierbranco78@gmail.com</div>
+                <a href="mailto:olivierbranco78@gmail.com" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Envoyer un email
+                </a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                <div class="contact-info">07 71 67 54 93</div>
+                <a href="tel:0771675493" class="btn btn-primary">
+                    <i class="fas fa-phone"></i> Appeler
+                </a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="contact-info">Periers (50190)<br>Normandie</div>
+                <a href="#" class="btn btn-secondary">
+                    <i class="fas fa-download"></i> CV PDF
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Typing Animation
+        const phrases = [
+            "Je transforme les systèmes, les outils et les données en leviers d'impact.",
+            "Développeur d'applications, formateur, chef de projet et gestionnaire de parc.",
+            "18 ans d'expérience au service de l'innovation numérique.",
+            "De Oracle à la collectivité : une expertise technique polyvalente."
+        ];
+        
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingSpeed = 50;
+        const deletingSpeed = 30;
+        const pauseTime = 2000;
+
+        function typeText() {
+            const currentPhrase = phrases[phraseIndex];
+            const typingElement = document.getElementById('typing-text');
+            
+            if (isDeleting) {
+                typingElement.innerHTML = currentPhrase.substring(0, charIndex - 1) + '<span class="cursor">|</span>';
+                charIndex--;
+                
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    setTimeout(typeText, 500);
+                    return;
+                }
+                setTimeout(typeText, deletingSpeed);
+            } else {
+                typingElement.innerHTML = currentPhrase.substring(0, charIndex + 1) + '<span class="cursor">|</span>';
+                charIndex++;
+                
+                if (charIndex === currentPhrase.length) {
+                    setTimeout(() => {
+                        isDeleting = true;
+                        typeText();
+                    }, pauseTime);
+                    return;
+                }
+                setTimeout(typeText, typingSpeed);
+            }
+        }
+
+        // Scroll Animations
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
+
+        function checkScroll() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            timelineItems.forEach(item => {
+                if (isElementInViewport(item)) {
+                    item.classList.add('visible');
+                }
+            });
+            
+            fadeElements.forEach(element => {
+                if (isElementInViewport(element)) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const current = +counter.innerText;
+                const increment = target / 100;
+                
+                if (current < target) {
+                    counter.innerText = Math.ceil(current + increment);
+                    setTimeout(() => animateCounters(), 50);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        }
+
+        // Smooth Scroll
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            const offsetTop = element.offsetTop - 80;
+            
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        }
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(15, 23, 42, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(15, 23, 42, 0.95)';
+            }
+            
+            checkScroll();
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            typeText();
+            checkScroll();
+            
+            // Animate counters when skills section is visible
+            const skillsSection = document.getElementById('skills');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            observer.observe(skillsSection);
+        });
+
+        // Add fade-in class to elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.add('fade-in');
+            });
+        });
+    </script>
+</body>
+</html>
